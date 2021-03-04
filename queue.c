@@ -182,8 +182,8 @@ void split(list_ele_t *src, list_ele_t **front, list_ele_t **back)
 void merge_list(list_ele_t **head, list_ele_t *l, list_ele_t *r)
 {
     list_ele_t *list = NULL;
-    list_ele_t **indirect = &list;
-    while (l && r) {
+    list_ele_t **indirect;
+    for (indirect = &list; l && r; indirect = &(*indirect)->next) {
         if (strcmp(l->value, r->value) < 0) {
             *indirect = l;
             l = l->next;
@@ -191,20 +191,14 @@ void merge_list(list_ele_t **head, list_ele_t *l, list_ele_t *r)
             *indirect = r;
             r = r->next;
         }
-
-        indirect = &(*indirect)->next;
     }
-    if (l)
-        *indirect = l;
-    if (r)
-        *indirect = r;
-
+    *indirect = l ? l : r;
     *head = list;
 }
 
 void merge_sort(list_ele_t **head)
 {
-    if (!*head || !(*head)->next)
+    if (!(*head) || !(*head)->next)
         return;
 
     list_ele_t *left = NULL;
@@ -222,8 +216,9 @@ void q_sort(queue_t *q)
 
     merge_sort(&q->head);
     list_ele_t *walk = q->head;
-    while (walk)
+    while (walk->next)
         walk = walk->next;
 
     q->tail = walk;
 }
+
