@@ -25,12 +25,9 @@ typedef struct ELE {
 /* Queue structure */
 typedef struct {
     list_ele_t *head; /* Linked list of elements */
-    /* TODO: You will need to add more fields to this structure
-     *        to efficiently implement q_size and q_insert_tail.
-     */
-    /* TODO: Remove the above comment when you are about to implement. */
+    list_ele_t *tail;
+    size_t size;
 } queue_t;
-
 /* Operations on queue */
 
 /*
@@ -77,7 +74,7 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize);
  * Return number of elements in queue.
  * Return 0 if q is NULL or empty
  */
-int q_size(queue_t *q);
+size_t q_size(queue_t *q);
 
 /*
  * Reverse elements in queue
