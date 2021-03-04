@@ -27,9 +27,9 @@ void q_free(queue_t *q)
 
     list_ele_t *tmp = q->head;
     while (q->head) {
+        q->head = tmp->next;
         free(tmp->value);
         free(tmp);
-        q->head = q->head->next;
         tmp = q->head;
     }
     free(q);
@@ -42,6 +42,7 @@ void q_free(queue_t *q)
  * Argument s points to the string to be stored.
  * The function must explicitly allocate space and copy the string into it.
  */
+
 bool q_insert_head(queue_t *q, char *s)
 {
     if (!q)
@@ -146,24 +147,24 @@ void q_reverse(queue_t *q)
     if (!q->head->next)
         return;
 
-    list_ele_t *prev, *curr;
-    curr = q->head;
-    prev = NULL;
-    q->tail = q->head;
+    list_ele_t *curr = q->head;
+    list_ele_t *next = NULL;
+    list_ele_t *prev = NULL;
     while (curr) {
-        list_ele_t *tmp = curr;
-        curr = curr->next;
-        tmp->next = prev;
+        next = curr->next;
+        curr->next = prev;
         prev = curr;
+        curr = next;
     }
+    q->tail = q->head;
     q->head = prev;
 }
-
 /*
  * Sort elements of queue in ascending order
  * No effect if q is NULL or empty. In addition, if q has only one
  * element, do nothing.
  */
+
 void split(list_ele_t *src, list_ele_t **front, list_ele_t **back)
 {
     list_ele_t *slow = src;
