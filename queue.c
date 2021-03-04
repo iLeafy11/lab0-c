@@ -157,8 +157,65 @@ void q_reverse(queue_t *q)
  * No effect if q is NULL or empty. In addition, if q has only one
  * element, do nothing.
  */
+void split(list_ele_t *src, list_ele_t **front, list_ele_t **back)
+{
+    list_ele_t *slow = src;
+    list_ele_t *fast = src->next;
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    *front = src;
+    *back = slow->next;
+    slow->next = NULL;
+}
+
+void merge_list(list_ele_t **head, list_ele_t *l, list_ele_t *r)
+{
+    list_ele_t *list = NULL;
+    list_ele_t **indirect = &list;
+    while (l && r) {
+        if (strcmp(l->value, r->value) < 0) {
+            *indirect = l;
+            l = l->next;
+        } else {
+            *indirect = r;
+            r = r->next;
+        }
+
+        indirect = &(*indirect)->next;
+    }
+    if (l)
+        *indirect = l;
+    if (r)
+        *indirect = r;
+
+    *head = list;
+}
+
+void merge_sort(list_ele_t **head)
+{
+    if (!*head || !(*head)->next)
+        return;
+
+    list_ele_t *left = NULL;
+    list_ele_t *right = NULL;
+    split(*head, &left, &right);
+    merge_sort(&left);
+    merge_sort(&right);
+    merge_list(head, left, right);
+}
+
 void q_sort(queue_t *q)
 {
-    /* TODO: You need to write the code for this function */
-    /* TODO: Remove the above comment when you are about to implement. */
+    if (!q || !q->head)
+        return;
+
+    merge_sort(&q->head);
+    list_ele_t *walk = q->head;
+    while (walk)
+        walk = walk->next;
+
+    q->tail = walk;
 }
