@@ -44,8 +44,11 @@ void q_free(queue_t *q)
  */
 bool q_insert_head(queue_t *q, char *s)
 {
+    if (!q)
+        return false;
+
     list_ele_t *newh = malloc(sizeof(list_ele_t));
-    if (!q || !newh)
+    if (!newh)
         return false;
 
     newh->value = strdup(s);
@@ -71,8 +74,11 @@ bool q_insert_head(queue_t *q, char *s)
  */
 bool q_insert_tail(queue_t *q, char *s)
 {
-    list_ele_t *newt = calloc(1, sizeof(list_ele_t));
-    if (!q || !newt)
+    if (!q)
+        return false;
+
+    list_ele_t *newt = malloc(sizeof(list_ele_t));
+    if (!newt)
         return false;
 
     newt->value = strdup(s);
@@ -80,6 +86,7 @@ bool q_insert_tail(queue_t *q, char *s)
         free(newt);
         return false;
     }
+    newt->next = NULL;
     if (!q->tail)
         q->head = newt;
     else
