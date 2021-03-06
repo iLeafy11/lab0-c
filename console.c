@@ -18,7 +18,7 @@
 #include "report.h"
 
 /* Some global values */
-bool simulation = false;
+int simulation = false;
 static cmd_ptr cmd_list = NULL;
 static param_ptr param_list = NULL;
 static bool block_flag = false;
@@ -56,7 +56,7 @@ static int fd_max = 0;
 /* Parameters */
 static int err_limit = 5;
 static int err_cnt = 0;
-static bool echo = 0;
+static int echo = 0;
 
 static bool quit_flag = false;
 static char *prompt = "cmd> ";
@@ -76,6 +76,9 @@ static bool do_source_cmd(int argc, char *argv[]);
 static bool do_log_cmd(int argc, char *argv[]);
 static bool do_time_cmd(int argc, char *argv[]);
 static bool do_comment_cmd(int argc, char *argv[]);
+// static bool do_new(int argc, char *argv[]);
+// static bool do_free(int argc, char *argv[]);
+static bool do_hello(int argc, char *argv[]);
 
 static void init_in();
 
@@ -101,6 +104,9 @@ void init_cmd()
     add_cmd("log", do_log_cmd, " file           | Copy output to file");
     add_cmd("time", do_time_cmd, " cmd arg ...    | Time command execution");
     add_cmd("#", do_comment_cmd, " ...            | Display comment");
+    // add_cmd("new", do_new, "                | Create new queue");
+    // add_cmd("free", do_free, "                | Delete queue");
+    add_cmd("hello", do_hello, "                | Print hello message");
     add_param("simulation", (int *) &simulation, "Start/Stop simulation mode",
               NULL);
     add_param("verbose", &verblevel, "Verbosity level", NULL);
@@ -431,6 +437,11 @@ static bool do_time_cmd(int argc, char *argv[])
     }
 
     return ok;
+}
+
+static bool do_hello(int argc, char *argv[])
+{
+    return (bool) printf("Hello, World\n");
 }
 
 /* Create new buffer for named file.

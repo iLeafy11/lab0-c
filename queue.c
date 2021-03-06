@@ -159,12 +159,12 @@ void q_reverse(queue_t *q)
     q->tail = q->head;
     q->head = prev;
 }
+
 /*
  * Sort elements of queue in ascending order
  * No effect if q is NULL or empty. In addition, if q has only one
  * element, do nothing.
  */
-
 void split(list_ele_t *src, list_ele_t **front, list_ele_t **back)
 {
     list_ele_t *slow = src;
